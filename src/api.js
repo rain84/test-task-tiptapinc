@@ -7,3 +7,9 @@ export const endpoint = {
     todos(userId) { return `${API_URL}/todos?userId=${userId}`},
     albums(userId) { return `${API_URL}/albums?userId=${userId}`},
 }
+
+export const routing = {
+  home: '/',
+  user: '/user',
+  subcomments: '/subcomments',
+}

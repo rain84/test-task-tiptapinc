@@ -1,9 +1,27 @@
 import React from 'react'
-import { Layout } from './ui'
-import './styles.css';
+import { Routes, Route, Navigate } from 'react-router-dom'
 
-const App = () => (
-  <Layout />
-)
+import { Users, User, Subcomments } from './ui'
+import { StoreProvider } from './hooks'
+import { routing } from './api'
+import './styles.css'
 
-export default App;
+const App = () => {
+  return (
+    <StoreProvider>
+      <Routes>
+        <Route path={routing.home}>
+          <Route path={routing.home} element={<Users />} />
+          <Route path={`${routing.user}/:id`} element={<User />} />
+          <Route path={routing.subcomments} element={<Subcomments />} />
+          <Route
+            path="*"
+            element={<Navigate to={routing.home} replace={true} />}
+          />
+        </Route>
+      </Routes>
+    </StoreProvider>
+  )
+}
+
+export default App
