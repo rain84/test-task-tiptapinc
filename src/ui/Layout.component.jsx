@@ -1,59 +1,68 @@
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
+import { useFetch } from '../hooks'
+import { endpoint } from '../api'
+import { utils } from '../utils'
 
-const API_URL = 'https://jsonplaceholder.typicode.com'
+const getUserStat = (stat, id) =>
+  stat?.find((items) => items?.[0]?.userId === id)
 
-export const Layout = () => { 
-    const [users, setUsers] = useState(null)
-    const [statistic, setStatistic] = useState([])
+export const Layout = () => {
+  const [users_, usersError] = useFetch(endpoint.users())
+  const users = useMemo(
+    () =>
+      users_?.map(({ id, username, email }) => ({
+        id,
+        username,
+        email,
+      })),
+    [users_]
+  )
 
-    useEffect(() => {
-        ;(async () => {
-            try {
-                const users = (await (await fetch(`${API_URL}/users?`)).json())
-                    .map(({id, username, email}) => ({id, username, email}))
-
-                setUsers(users)
-
-                users.forEach(user => {
-                    ; (async () => {
-                        const posts = (await fetch(`${API_URL}/posts?userId=${user.id}`)).json()
-                        // const todos = fetch(`${API_URL}/todos?userId=${user.id}`)
-                        // const albums = fetch(`${API_URL}/albums?userId=${user.id}`)
-
-                        statistic.push(Promise.allSettled([posts,]))
-                        // statistic.push(Promise.allSettled([posts, todos, albums]))
-                    } )()
-                })
-
-                // statistic = await Promise.allSettled(statistic)
-                console.log(JSON.stringify(statistic, null, ' '))
-
-            } catch (error) {
-                alert(`Catched error: ${error.message}`)
-            }
-        })()
-    }, [])
-
-    return (
-        <div>
-            {users && (
-                <table>
-                <thead>
-                    <tr><td rowSpan="2">USERS</td><td rowSpan="3">STATISTIC</td></tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user) => (
-                            <tr key={ user.id }>
-                                <td>{ user.username }</td>
-                                <td>{ user.email }</td>
-                                <td>{ 'statistic' }</td>
-                                <td>{ 'statistic' }</td>
-                                <td>{ 'statistic' }</td>
-                            </tr>
-                        ))}        
-                    </tbody>
-                </table>
-            )}
-        </div>
+  const endpoints = ['posts', 'todos', 'albums'].reduce((acc, type) => {
+    acc[type] = useMemo(
+      () => users?.map(({ id }) => endpoint[type](id)),
+      [users]
     )
+    return acc
+  }, {})
+
+  const [posts, postsError] = useFetch(endpoints.posts, [endpoints.posts])
+  const [todos, todosError] = useFetch(endpoints.todos, [endpoints.posts])
+  const [albums, albumsError] = useFetch(endpoints.albums, [endpoints.posts])
+
+  const error = utils.createErrorMessage({
+    usersError,
+    postsError,
+    todosError,
+    albumsError,
+  })
+
+  return (
+    <div>
+      {users && (
+        <table>
+          <thead>
+            <tr>
+              <td colSpan="2">USERS</td>
+              <td>Posts</td>
+              <td>Todos</td>
+              <td>Albums</td>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{getUserStat(posts, user.id)?.length}</td>
+                <td>{getUserStat(todos, user.id)?.length}</td>
+                <td>{getUserStat(albums, user.id)?.length}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      {error && <p>{error}</p>}
+    </div>
+  )
 }
