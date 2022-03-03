@@ -1,1 +1,1 @@
-export const ErrorMessage = (message) => <p>{message}</p>
+export const Error = ({ children }) => <p>{children}</p>
