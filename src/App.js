@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { Users, User, Comments } from './ui'
-import { routing } from './api'
+import { routing } from './app.config'
 import styles from './styles.module.sass'
 
 const App = () => {
