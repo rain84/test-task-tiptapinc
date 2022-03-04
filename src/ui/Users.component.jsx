@@ -2,9 +2,9 @@ import { useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useFetch, useStore } from '../hooks'
-import { endpoint, routing } from '../api'
+import { endpoint, routing } from '../app.config'
 import { utils } from '../utils'
-import { Error } from './Error.component'
+import { Error, Table } from '../ui'
 import style from './style.module.sass'
 
 const getUserStat = (stat, id) =>
@@ -23,8 +23,9 @@ export const Users = () => {
   const [users_, usersError] = useFetch(endpoint.users())
   const users = useMemo(
     () =>
-      users_?.map(({ id, username, email }) => ({
+      users_?.map(({ id, name, username, email }) => ({
         id,
+        name,
         username,
         email,
       })),
@@ -50,16 +51,19 @@ export const Users = () => {
     albumsError,
   })
 
-  const [, updateStore] = useStore()
+  const [store, updateStore] = useStore()
   updateStore({ users, posts, albums, todos }, [users, posts, albums, todos])
 
   if (error) return <Error>{error}</Error>
+  if (!users) return null
 
-  return users ? (
+  return (
     <table className={style.table}>
       <thead>
         <tr>
-          <td colSpan="2">USERS</td>
+          <td colSpan="2" className={style.text_center}>
+            USERS
+          </td>
           <td>Posts</td>
           <td>Todos</td>
           <td>Albums</td>
@@ -77,5 +81,5 @@ export const Users = () => {
         ))}
       </tbody>
     </table>
-  ) : null
+  )
 }
