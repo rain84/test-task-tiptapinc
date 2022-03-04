@@ -11,5 +11,4 @@ export const endpoint = {
 export const routing = {
   home: '/',
   user: '/user',
-  subcomments: '/subcomments',
 }
