@@ -46,28 +46,36 @@ export const Users = () => {
   if (!users) return null
 
   return (
-    <table className={style.table}>
-      <thead>
-        <tr>
-          <td colSpan="2" className={style.text_center}>
-            USERS
-          </td>
-          <td>Posts</td>
-          <td>Todos</td>
-          <td>Albums</td>
-        </tr>
-      </thead>
-      <tbody onClick={onClick}>
-        {users.map((user) => (
-          <tr key={user.id} data-id={user.id}>
-            <td>{user.username}</td>
-            <td>{user.email}</td>
-            <td>{getUserStat(posts, user.id)?.length}</td>
-            <td>{getUserStat(todos, user.id)?.length}</td>
-            <td>{getUserStat(albums, user.id)?.length}</td>
+    <div>
+      <br />
+
+      <p className={style.text_center}>USERS ({users?.length ?? '0'})</p>
+
+      <br />
+      <table className={style.table}>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Posts</td>
+            <td>Todos</td>
+            <td>Albums</td>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody onClick={onClick}>
+          {users.map((user) => (
+            <tr key={user.id} data-id={user.id}>
+              <td>{user.id}</td>
+              <td>{user.username}</td>
+              <td>{user.email}</td>
+              <td>{getUserStat(posts, user.id)?.length}</td>
+              <td>{getUserStat(todos, user.id)?.length}</td>
+              <td>{getUserStat(albums, user.id)?.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

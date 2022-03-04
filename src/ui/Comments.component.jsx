@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { useFetch } from '../hooks'
 import { endpoint } from '../app.config'
@@ -17,23 +17,20 @@ export const Comments = () => {
   })
 
   if (error) return <Error>{error}</Error>
-  console.log('comments', comments)
 
   return (
     <div>
-      <p className={style.text_right}>
+      <br />
+
+      <p className={style.text_center}>
+        Comments ({comments?.length ?? '0'}) &nbsp;
         <Button.GoBack />
       </p>
 
       <br />
 
-      {comments && (
-        <Table
-          caption={`Comments (${comments.length ?? '0'})`}
-          rows={comments}
-          columns={['id', 'name']}
-        />
-      )}
+      <br />
+      {comments && <Table rows={comments} columns={['id', 'name']} />}
     </div>
   )
 }

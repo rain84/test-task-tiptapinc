@@ -38,7 +38,9 @@ export const User = () => {
 
   return (
     <div>
-      <p className={style.text_right}>
+      <p className={style.text_center}>
+        USER <span className={style.color_red}>{user?.username}</span>&nbsp;(
+        {user?.email}) &nbsp;
         <Button.GoBack />
       </p>
 
@@ -46,18 +48,15 @@ export const User = () => {
 
       {user && (
         <div>
-          <p className={style.text_center}>
-            USER {user.name} ({user.email})
-          </p>
           <div className={style.posts_and_albums}>
             <Table
-              caption="POSTS"
+              caption={`POSTS (${posts?.length ?? '0'})`}
               rows={posts}
               columns={['id', 'title']}
               onClick={onClick.posts}
             />
             <Table
-              caption="ALBUMS"
+              caption={`ALBUMS (${albums?.length ?? '0'})`}
               rows={albums}
               columns={['id', 'title']}
               onClick={onClick.albums}
