@@ -11,7 +11,9 @@ export const Table = ({ className, caption, rows, columns, onClick }) => {
         </tr>
         <tr>
           {columns.map((column) => (
-            <td key={column}>{column}</td>
+            <td className={style.text_capitalize} key={column}>
+              {column}
+            </td>
           ))}
         </tr>
       </thead>
