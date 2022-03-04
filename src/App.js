@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import { Users, User, Comments } from './ui'
+import { Users, User, Comments, Photos } from './ui'
 import { routing } from './app.config'
 import styles from './styles.module.sass'
 
@@ -16,6 +16,10 @@ const App = () => {
             <Route
               path={`${routing.user}/:userId/posts/:postId/comments`}
               element={<Comments />}
+            />
+            <Route
+              path={`${routing.user}/:userId/albums/:albumId/photos`}
+              element={<Photos />}
             />
             <Route
               path="*"
