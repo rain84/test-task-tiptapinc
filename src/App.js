@@ -12,9 +12,9 @@ const App = () => {
         <Routes>
           <Route path={routing.home}>
             <Route path={routing.home} element={<Users />} />
-            <Route path={`${routing.user}/:id`} element={<User />} />
+            <Route path={`${routing.user}/:userId`} element={<User />} />
             <Route
-              path={`${routing.user}/:id/:commentsType/:typeId`}
+              path={`${routing.user}/:userId/:commentsType/:typeId`}
               element={<Comments />}
             />
             <Route
