@@ -16,17 +16,17 @@ export const endpoint = {
   todos() {
     return `${API_URL}/todos`
   },
-  
-  albums(userId) {
+
+  albums({ userId } = {}) {
     const queryParams = userId ? `?userId=${userId}` : ''
     return `${API_URL}/albums${queryParams}`
   },
 
-  comments(postId) {
+  comments({ postId } = {}) {
     return `${API_URL}/posts/${postId}/comments`
   },
 
-  photos(albumId) {
+  photos({ albumId } = {}) {
     return `${API_URL}/albums/${albumId}/photos`
   },
 }

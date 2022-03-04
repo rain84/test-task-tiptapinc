@@ -10,19 +10,19 @@ import style from './style.module.sass'
 export const User = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { userId } = useParams()
 
-  const cb = (type) => (e) => {
+  const cb = (type, subtype) => (e) => {
     const { id } = e.target.closest('[data-id]')?.dataset
     if (!id) return
 
-    navigate(`${location.pathname}/${type}/${id}`)
+    const url = `${location.pathname}/${type}/${id}/${subtype}`
+    navigate(url)
   }
   const onClick = {
-    posts: useRef(cb('posts')).current,
-    albums: useRef(cb('albums')).current,
+    posts: useRef(cb('posts', 'comments')).current,
+    albums: useRef(cb('albums', 'photos')).current,
   }
-
-  const { userId } = useParams()
 
   const [user, userError] = useFetch(endpoint.users({ userId }))
   const [posts, postsError] = useFetch(endpoint.posts({ userId }), [userId])

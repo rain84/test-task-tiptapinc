@@ -14,7 +14,7 @@ const App = () => {
             <Route path={routing.home} element={<Users />} />
             <Route path={`${routing.user}/:userId`} element={<User />} />
             <Route
-              path={`${routing.user}/:userId/:commentsType/:typeId`}
+              path={`${routing.user}/:userId/posts/:postId/comments`}
               element={<Comments />}
             />
             <Route
