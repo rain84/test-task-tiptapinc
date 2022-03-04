@@ -1,14 +1,13 @@
 import { useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useFetch, useStore } from '../hooks'
+import { useFetch } from '../hooks'
 import { endpoint, routing } from '../app.config'
 import { utils } from '../utils'
-import { Error, Table } from '../ui'
+import { Error } from '../ui'
 import style from './style.module.sass'
 
-const getUserStat = (stat, id) =>
-  stat?.find((items) => items?.[0]?.userId === id)
+const getUserStat = (stat, id) => stat?.filter(({ userId }) => userId === id)
 
 export const Users = () => {
   const navigate = useNavigate()
@@ -32,17 +31,9 @@ export const Users = () => {
     [users_]
   )
 
-  const endpoints = ['posts', 'todos', 'albums'].reduce((acc, type) => {
-    acc[type] = useMemo(
-      () => users?.map(({ id }) => endpoint[type](id)),
-      [users]
-    )
-    return acc
-  }, {})
-
-  const [posts, postsError] = useFetch(endpoints.posts, [endpoints.posts])
-  const [todos, todosError] = useFetch(endpoints.todos, [endpoints.posts])
-  const [albums, albumsError] = useFetch(endpoints.albums, [endpoints.posts])
+  const [posts, postsError] = useFetch(endpoint.posts(), [endpoint.posts])
+  const [todos, todosError] = useFetch(endpoint.todos(), [endpoint.posts])
+  const [albums, albumsError] = useFetch(endpoint.albums(), [endpoint.posts])
 
   const error = utils.createErrorMessage({
     usersError,
@@ -50,9 +41,6 @@ export const Users = () => {
     todosError,
     albumsError,
   })
-
-  const [store, updateStore] = useStore()
-  updateStore({ users, posts, albums, todos }, [users, posts, albums, todos])
 
   if (error) return <Error>{error}</Error>
   if (!users) return null

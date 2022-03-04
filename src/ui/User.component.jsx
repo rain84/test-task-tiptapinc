@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { useFetch, useStore } from '../hooks'
+import { useFetch } from '../hooks'
 import { endpoint } from '../app.config'
+import { utils } from '../utils'
 import { Button, Table } from '../ui'
 import style from './style.module.sass'
 
@@ -21,19 +22,19 @@ export const User = () => {
     albums: useRef(cb('albums')).current,
   }
 
-  const [store] = useStore()
-  const { id } = useParams()
+  const { userId } = useParams()
 
-  const users = store?.users ? store.users : useFetch(endpoint.users())?.[0]
-  const user = users?.find((user) => user.id == id)
+  const [user, userError] = useFetch(endpoint.users({ userId }))
+  const [posts, postsError] = useFetch(endpoint.posts({ userId }), [userId])
+  const [albums, albumsError] = useFetch(endpoint.albums({ userId }), [userId])
 
-  const posts = store?.posts
-    ? store.posts.find((posts) => posts?.[0]?.userId == id)
-    : useFetch(endpoint.posts(id), [id])?.[0]
+  const error = utils.createErrorMessage({
+    userError,
+    postsError,
+    albumsError,
+  })
 
-  const albums = store?.albums
-    ? store.albums.find((albums) => albums?.[0]?.userId == id)
-    : useFetch(endpoint.albums(id), [id])?.[0]
+  if (error) return <Error>{error}</Error>
 
   return (
     <div>
