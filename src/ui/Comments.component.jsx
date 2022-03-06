@@ -1,16 +1,13 @@
 import { useParams } from 'react-router-dom'
 
-import { useFetch } from '../hooks'
-import { endpoint } from '../app.config'
+import { useSimpleQuery } from '../hooks'
 import { Button, Table } from '../ui'
 import { utils } from '../utils'
 import style from './style.module.sass'
 
 export const Comments = () => {
   const { postId } = useParams()
-  const [comments, commentsError] = useFetch(endpoint.comments({ postId }), [
-    postId,
-  ])
+  const [comments, commentsError] = useSimpleQuery('comments', { postId })
 
   const error = utils.createErrorMessage({
     commentsError,

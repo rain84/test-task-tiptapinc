@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { useFetch } from '../hooks'
-import { endpoint } from '../app.config'
+import { useSimpleQuery } from '../hooks'
 import { utils } from '../utils'
 import { Button, Table } from '../ui'
 import style from './style.module.sass'
@@ -24,9 +23,9 @@ export const User = () => {
     albums: useRef(cb('albums', 'photos')).current,
   }
 
-  const [user, userError] = useFetch(endpoint.users({ userId }))
-  const [posts, postsError] = useFetch(endpoint.posts({ userId }), [userId])
-  const [albums, albumsError] = useFetch(endpoint.albums({ userId }), [userId])
+  const [user, userError] = useSimpleQuery('users', { userId })
+  const [posts, postsError] = useSimpleQuery('posts', { userId })
+  const [albums, albumsError] = useSimpleQuery('albums', { userId })
 
   const error = utils.createErrorMessage({
     userError,

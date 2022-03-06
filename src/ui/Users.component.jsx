@@ -1,8 +1,8 @@
 import { useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useFetch } from '../hooks'
-import { endpoint, routing } from '../app.config'
+import { useSimpleQuery } from '../hooks'
+import { routing } from '../app.config'
 import { utils } from '../utils'
 import { Error } from '../ui'
 import style from './style.module.sass'
@@ -19,30 +19,31 @@ export const Users = () => {
     navigate(url)
   }, [])
 
-  const [users_, usersError] = useFetch(endpoint.users())
-  const users = useMemo(
+  let [users, usersError] = useSimpleQuery('users')
+
+  users = useMemo(
     () =>
-      users_?.map(({ id, name, username, email }) => ({
+      users?.map(({ id, name, username, email }) => ({
         id,
         name,
         username,
         email,
       })),
-    [users_]
+    [users]
   )
 
-  const [posts, postsError] = useFetch(endpoint.posts(), [endpoint.posts])
-  const [todos, todosError] = useFetch(endpoint.todos(), [endpoint.posts])
-  const [albums, albumsError] = useFetch(endpoint.albums(), [endpoint.posts])
+  const [posts, postsError] = useSimpleQuery('posts')
+  const [todos, todosError] = useSimpleQuery('todos')
+  const [albums, albumsError] = useSimpleQuery('albums')
 
-  const error = utils.createErrorMessage({
+  const err = utils.createErrorMessage({
     usersError,
     postsError,
     todosError,
     albumsError,
   })
 
-  if (error) return <Error>{error}</Error>
+  if (err) return <Error>{err}</Error>
   if (!users) return null
 
   return (

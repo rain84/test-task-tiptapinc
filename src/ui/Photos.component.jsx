@@ -1,16 +1,13 @@
 import { useParams } from 'react-router-dom'
 
-import { useFetch } from '../hooks'
-import { endpoint } from '../app.config'
+import { useSimpleQuery } from '../hooks'
 import { Button } from '../ui'
 import { utils } from '../utils'
 import style from './style.module.sass'
 
 export const Photos = () => {
   const { albumId } = useParams()
-  const [photos, photosError] = useFetch(endpoint.photos({ albumId }), [
-    albumId,
-  ])
+  const [photos, photosError] = useSimpleQuery('photos', { albumId })
 
   const error = utils.createErrorMessage({
     photosError,
