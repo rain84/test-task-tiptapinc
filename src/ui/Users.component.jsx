@@ -7,7 +7,16 @@ import { utils } from '../utils'
 import { Error } from '../ui'
 import style from './style.module.sass'
 
-const getUserStat = (stat, id) => stat?.filter(({ userId }) => userId === id)
+const selectors = {
+  userStat: (stat, id) => stat?.filter(({ userId }) => userId === id),
+  pickUsersInfo: (users) =>
+    users?.map(({ id, name, username, email }) => ({
+      id,
+      name,
+      username,
+      email,
+    })),
+}
 
 export const Users = () => {
   const navigate = useNavigate()
@@ -20,17 +29,7 @@ export const Users = () => {
   }, [])
 
   let [users, usersError] = useSimpleQuery('users')
-
-  users = useMemo(
-    () =>
-      users?.map(({ id, name, username, email }) => ({
-        id,
-        name,
-        username,
-        email,
-      })),
-    [users]
-  )
+  users = useMemo(() => selectors.pickUsersInfo(users), [users])
 
   const [posts, postsError] = useSimpleQuery('posts')
   const [todos, todosError] = useSimpleQuery('todos')
@@ -70,9 +69,9 @@ export const Users = () => {
               <td>{user.id}</td>
               <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>{getUserStat(posts, user.id)?.length}</td>
-              <td>{getUserStat(todos, user.id)?.length}</td>
-              <td>{getUserStat(albums, user.id)?.length}</td>
+              <td>{selectors.userStat(posts, user.id)?.length}</td>
+              <td>{selectors.userStat(todos, user.id)?.length}</td>
+              <td>{selectors.userStat(albums, user.id)?.length}</td>
             </tr>
           ))}
         </tbody>
