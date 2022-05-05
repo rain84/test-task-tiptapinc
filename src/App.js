@@ -2,7 +2,8 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { Users, User, Comments, Photos } from './ui'
-import { routing } from './app.config'
+import { TestTask } from './features'
+import { routing } from './config'
 import styles from './styles.module.sass'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
               path={`${routing.user}/:userId/albums/:albumId/photos`}
               element={<Photos />}
             />
+            <Route path={routing.test_task_for_close} element={<TestTask />} />
             <Route
               path="*"
               element={<Navigate to={routing.home} replace={true} />}

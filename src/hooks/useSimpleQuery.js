@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
-import { endpoint } from '../app.config'
+import { endpoint } from '../config'
 
 export const useSimpleQuery = (type, params) => {
   const deps = params ? Object.values(params) : []

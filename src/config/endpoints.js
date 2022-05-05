@@ -30,8 +30,3 @@ export const endpoint = {
     return `${API_URL}/albums/${albumId}/photos`
   },
 }
-
-export const routing = {
-  home: '/',
-  user: '/user',
-}

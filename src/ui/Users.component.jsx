@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSimpleQuery } from '../hooks'
-import { routing } from '../app.config'
+chimport { routing } from '../config'
 import { utils } from '../utils'
 import { Error } from '../ui'
 import style from './style.module.sass'
